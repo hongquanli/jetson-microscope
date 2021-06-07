@@ -101,12 +101,12 @@ class Application(tk.Frame):
                                      width = 32, height = 2,
                                      command=lambda:record(self.entry_filename.get(),
                                                             self.entry_ss.get(),
-                                                            self.entry_bitrate.get()))
         self.btn_record.grid(row=15+2,column=0,columnspan=5,rowspan=2)
 
 	# playback
         self.btn_record = tk.Button(self, text="Play (Click to Select File)", fg="black", bg = "yellow",
                                      width = 32, height = 2,
+                                                            self.entry_bitrate.get()))
                                      command=lambda:play(self.entry_filename.get(),
                                                             self.entry_ss.get(),
                                                             self.entry_bitrate.get()))
@@ -121,17 +121,20 @@ def preview(prefix,ss,analog_gain,digital_gain,fps,bitrate):
         '_' + '{:%Y-%m-%d %H-%M-%S-%f}'.format(datetime.datetime.now())[:-3]
               )
    print(filename)
-   cmd = "gst-launch-1.0 nvarguscamerasrc ispdigitalgainrange=\"" + digital_gain + " " + digital_gain + "\" gainrange=\"" + analog_gain + " " + analog_gain + "\" exposuretimerange=\"" + str(float(ss)*1000000) + " " + str(float(ss)*1000000) + "\" ! \'video/x-raw(memory:NVMM), width=(int)3280, height=(int)2464, format=(string)NV12, framerate=(fraction)" + fps + "/1\' ! nvoverlaysink -e"
+   cmd = "gst-launch-1.0 -e nvarguscamerasrc sensor-id=0 aelock=true exposuretimerange=\"" + str(float(ss)*1000000) + " " + str(float(ss)*1000000) + "\" ! \'video/x-raw(memory:NVMM), width=(int)4032, height=(int)3040, format=(string)NV12, framerate=(fraction)" + fps + "/1\' ! nvvidconv flip-method=2 ! nvoverlaysink -e"
+   # cmd = "gst-launch-1.0 -e nvarguscamerasrc sensor-id=0 aelock=true exposuretimerange=\'10000 10000\' ispdigitalgainrange=\"" + digital_gain + " " + digital_gain + "\" gainrange=\"" + analog_gain + " " + analog_gain + "\" exposuretimerange=\"" + str(float(ss)*1000000) + " " + str(float(ss)*1000000) + "\" ! \'video/x-raw(memory:NVMM), width=(int)3280, height=(int)2464, format=(string)NV12, framerate=(fraction)" + fps + "/1\' ! nvoverlaysink -e"
    call(cmd,shell=True)
+
+# 
 
 def record(prefix,ss,bitrate):
    filename = (prefix +
         '_' + str(ss) + ' ms' +
-	'_' + str(bitrate) + ' Mbps'
-        '_' + '{:%Y-%m-%d %H-%M-%S-%f}'.format(datetime.datetime.now())[:-3]
-              )
+        '_' + str(bitrate) + ' Mbps' +
+        '_' + '{:%Y-%m-%d %H-%M-%S-%f}'.format(datetime.datetime.now())[:-3] +
+        '.mp4')
    print(filename)
-   cmd = "git --version"
+   cmd = "gst-launch-1.0 -e nvarguscamerasrc sensor-id=0 aelock=true exposuretimerange=\"" + str(float(ss)*1000000) + " " + str(float(ss)*1000000) + "\" ! \'video/x-raw(memory:NVMM), width=(int)4032, height=(int)3040, format=(string)NV12, framerate=(fraction)" + fps + "/1\' ! nvv4l2h264enc ! h264parse ! mp4mux ! filesink location=" + filename
    call(cmd,shell=True)
 
 def play(prefix,ss,bitrate):
