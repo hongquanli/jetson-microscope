@@ -11,7 +11,7 @@ chmod +x install_full.sh
 ## Install Argus
 ```
 cp -rf /usr/src/jetson_multimedia_api ~/
-cd ~/jetson_multimedia_api
+cd ~/jetson_multimedia_api/argus
 mkdir build
 cd build
 cmake ..
