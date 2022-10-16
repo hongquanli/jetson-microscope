@@ -12,7 +12,15 @@ Open /boot/config.txt, under [all], add the following line:
 dtoverlay=vc4-kms-v3d,cma-512
 ```
 ### Preview
+```
 libcamera-still -t 0 --viewfinder-width 2312 --viewfinder-height 1736
+```
+
+### Timelapse
+Example with duration 3 hours, interval 30s, exposure time 0.9s and analog gain 5
+```
+libcamera-still -t 10800000 --viewfinder-width 2312 --viewfinder-height 1736 --width 9152 --height 6944 --timelapse 30000 --framerate 1 --shutter 900000 --analoggain 5  -o %04d.jpg
+```
 
 ### Focus Control
 ```
