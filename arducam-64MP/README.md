@@ -1,5 +1,6 @@
 ## Driver Installation
 https://www.arducam.com/downloads/64mp-autofocus-quad-camera-kit.pdf
+https://www.arducam.com/docs/cameras-for-raspberry-pi/what-is-libcamera/
 ```
 wget -O install_pivariety_pkgs.sh https://github.com/ArduCAM/Arducam-Pivariety-V4L2-Driver/releases/download/install_script/install_pivariety_pkgs.sh
 chmod +x install_pivariety_pkgs.sh
